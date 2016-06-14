@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\Admin\Auth;
-
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+/* Add by myself */
+use App\AdminUsers;
+use App\Http\Requests\AdminUsersRequest;
+use Hash;
 class Auth extends Controller
 {
+    public $dataPassToView = array();
     /**
      * Display a listing of the resource.
      *
@@ -16,17 +18,24 @@ class Auth extends Controller
      */
     public function index()
     {
-        //
+        return View('admin.auth.login');
     }
-
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function login(AdminUsersRequest $request)
     {
-        //
+        $objAdminUsers = AdminUsers::where('email', $request->email)->first();
+        if ($objAdminUsers != null) {
+            if (Hash::check($request->password, $objAdminUsers->password)) {
+                return redirect('admin');
+            } else {
+                $dataPassToView['listUsers'] = $listUsers;
+                return redirect('admin/login');
+            }
+        }
     }
 
     /**

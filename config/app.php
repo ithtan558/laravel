@@ -67,6 +67,12 @@ return [
 
     'locale' => 'en',
 
+    'locales' => [
+        'en' => 'English',
+        'vi' => 'Vietnamese'
+    ],
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -201,6 +207,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Input' => Illuminate\Support\Facades\Input::class
 
     ],
 
