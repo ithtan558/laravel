@@ -1,72 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html ng-app="adminModule">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@yield('title')</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="<?= asset('public/css/bootstrap/bootstrap.min.css') ?>" rel="stylesheet">
 
-    <title>Laravel</title>
+    <!-- MetisMenu CSS -->
+    <link href="<?= asset('public/css/admin/metisMenu/metisMenu.min.css') ?>" rel="stylesheet">
 
-    <!-- Fonts -->
-    <link rel="stylesheet" href="<?= asset('public/css/font-awesome/css/font-awesome.min.css') ?>">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
+    <!-- DataTables CSS -->
+    <link href="<?= asset('public/css/datatables/dataTables.bootstrap.css') ?>" rel="stylesheet">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="<?= asset('public/css/bootstrap/bootstrap.min.css') ?>">
-    {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
+    <!-- Timeline CSS -->
+    <link href="<?= asset('public/css/admin/timeline.css')?>" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="<?= asset('public/css/admin/sb-admin-2.css')?>" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="<?= asset('public/css/font-awesome/font-awesome.min.css') ?>" rel="stylesheet" type="text/css">
+
+    <!-- jQuery -->
+    <script src="<?= asset('public/js/jquery/jquery.min.js') ?>"></script>
+    <!-- Angular Core JavaScript -->
+    <script src="<?= asset('public/app/lib/angular.min.js') ?>"></script>
+
+    <!-- App js angular Core JavaScript -->
+    <script src="<?= asset('public/app/app.js') ?>"></script>
 </head>
-<body id="app-layout">
-    <nav class="navbar navbar-default navbar-static-top">
-        <div class="container">
-            <div class="navbar-header">
+<body>
+    <div id="wrapper">
+        <!-- Navigation -->
+        @include('admin.sidebar')
 
-                <!-- Collapsed Hamburger -->
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                    <span class="sr-only">Toggle Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-
-                <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel
-                </a>
-            </div>
-
-            <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                <!-- Left Side Of Navbar -->
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/home') }}">Home</a></li>
-                </ul>
-
-                <!-- Right Side Of Navbar -->
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- Authentication Links -->
-                    @if (Auth::guest())
-                        <li><a href="{{ url('/login') }}">Login</a></li>
-                        <li><a href="{{ url('/register') }}">Register</a></li>
-                    @else
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
-
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                            </ul>
-                        </li>
-                    @endif
-                </ul>
-            </div>
+        <div id="page-wrapper">
+        @yield('javascriptUp')
+        @yield('content')
+        @yield('javascriptDown')
         </div>
-    </nav>
+        <!-- /#page-wrapper -->
 
-    @yield('content')
+    </div>
 
-    <!-- JavaScripts -->
-    <script src="<?= asset('public/css/jquery/jquery.min.js') ?>"></script>
+    <!-- Bootstrap Core JavaScript -->
     <script src="<?= asset('public/js/bootstrap/bootstrap.min.js') ?>"></script>
-    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+
+    <!-- DataTables JavaScript -->
+    <script src="<?= asset('public/js/datatables/jquery.dataTables.min.js') ?>"></script>
+
+    <script src="<?= asset('public/js/datatables/dataTables.bootstrap.min.js') ?>"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="<?= asset('public/js/admin/metisMenu/metisMenu.min.js') ?>"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="<?= asset('public/js/admin/sb-admin-2.js') ?>"></script>
+    
 </body>
 </html>

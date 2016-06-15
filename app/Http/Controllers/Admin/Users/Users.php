@@ -1,41 +1,36 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Auth;
+namespace App\Http\Controllers\admin\Users;
+
 use Illuminate\Http\Request;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-/* Add by myself */
+
 use App\AdminUsers;
-use App\Http\Requests\AdminUsersRequest;
-use Hash;
-class Auth extends Controller
+
+class Users extends Controller
 {
-    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        return View('admin.auth.login');
+        $listUsers = AdminUsers::paginate(LIMIT_PAGINATION);
+        $dataPassToView['listUsers'] = $listUsers;
+        return view('admin.users.users', $dataPassToView);
     }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function login(AdminUsersRequest $request)
+    public function create()
     {
-        $objAdminUsers = AdminUsers::where('email', $request->email)->first();
-        if ($objAdminUsers != null) {
-            if (Hash::check($request->password, $objAdminUsers->password)) {
-                return redirect('admin');
-            } else {
-                $dataPassToView['message'] = trans('admin/auth.login_fault');
-                return view('admin.auth.login', $dataPassToView);
-            }
-        }
+        //
     }
 
     /**

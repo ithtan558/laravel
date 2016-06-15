@@ -40,6 +40,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $locale = $request->segment(1);
         $this->app->setLocale($locale);
+        session(['language_locale' => $locale]);
         $router->group(['namespace' => $this->namespace, 'middleware' => 'web', 'prefix' => $locale], function($router) {
             require app_path('Http/routes.php');
         });
