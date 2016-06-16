@@ -18,7 +18,23 @@ class Auth extends Controller
      */
     public function index(Request $request)
     {
-        return View('admin.auth.login');
+        if ($request->cookie('email') !== false && $request->cookie('password') !== false) {
+            $email = $request->cookie('email');
+            $password = $request->cookie('password');
+            // Check Auth through email
+            $objAdminUsers = AdminUsers::where('email', $email)->first();
+            if ($objAdminUsers != null) {
+
+                // Check Auth through password
+                if (Hash::check($password, $objAdminUsers->password)) {
+                    return redirect('admin/users/list');
+                }
+            }
+            
+        } else {
+            return View('admin.auth.login');
+        }
+        
     }
     /**
      * Show the form for creating a new resource.
@@ -27,14 +43,32 @@ class Auth extends Controller
      */
     public function login(AdminUsersRequest $request)
     {
-        $objAdminUsers = AdminUsers::where('email', $request->email)->first();
+        // Check isset cookie email and password
+        $email = $request->email;
+        $password = $request->password;
+
+        // Check Auth through email
+        $objAdminUsers = AdminUsers::where('email', $email)->first();
         if ($objAdminUsers != null) {
-            if (Hash::check($request->password, $objAdminUsers->password)) {
-                return redirect('admin');
+
+            // Check Auth through password
+            if (Hash::check($password, $objAdminUsers->password)) {
+
+                // Check remember me
+                if ($request->remember) {
+                    $response = new \Illuminate\Http\Response();
+                    $response->withCookie('password', $password, 60);
+                    $response->withCookie('email', $email, 60);
+                    return $response;
+                }
+                return redirect('admin/users/list');
             } else {
                 $dataPassToView['message'] = trans('admin/auth.login_fault');
                 return view('admin.auth.login', $dataPassToView);
             }
+        } else {
+            $dataPassToView['message'] = trans('admin/auth.login_fault');
+            return view('admin.auth.login', $dataPassToView);
         }
     }
 

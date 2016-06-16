@@ -13,9 +13,6 @@
     <!-- MetisMenu CSS -->
     <link href="<?= asset('public/css/admin/metisMenu/metisMenu.min.css') ?>" rel="stylesheet">
 
-    <!-- DataTables CSS -->
-    <link href="<?= asset('public/css/datatables/dataTables.bootstrap.css') ?>" rel="stylesheet">
-
     <!-- Timeline CSS -->
     <link href="<?= asset('public/css/admin/timeline.css')?>" rel="stylesheet">
 
@@ -23,7 +20,7 @@
     <link href="<?= asset('public/css/admin/sb-admin-2.css')?>" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="<?= asset('public/css/font-awesome/font-awesome.min.css') ?>" rel="stylesheet" type="text/css">
+    <link href="<?= asset('public/css/font-awesome/css/font-awesome.min.css') ?>" rel="stylesheet">
 
     <!-- jQuery -->
     <script src="<?= asset('public/js/jquery/jquery.min.js') ?>"></script>
@@ -49,11 +46,6 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<?= asset('public/js/bootstrap/bootstrap.min.js') ?>"></script>
-
-    <!-- DataTables JavaScript -->
-    <script src="<?= asset('public/js/datatables/jquery.dataTables.min.js') ?>"></script>
-
-    <script src="<?= asset('public/js/datatables/dataTables.bootstrap.min.js') ?>"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="<?= asset('public/js/admin/metisMenu/metisMenu.min.js') ?>"></script>

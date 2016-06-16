@@ -1,5 +1,4 @@
-@extends('admin.layouts.master')
-@section('title', 'SB Admin 2 - Bootstrap Admin Theme')
+@extends('admin.layouts.app')
 @section('content')
 	<div class="row">
         <div class="col-lg-12">
@@ -30,10 +29,10 @@
                             <tbody>
                             @foreach ($listUsers as $key => $user)
                                 <tr class="@if ($key%2==0)  odd @else even @endif gradeX">
-                                    <td>{{$user->id}}</td>
-                                    <td>{{$user->avatar}}</td>
-                                    <td>{{$user->name}}</td>
-                                    <td>{{$user->email}}</td>
+                                    <td>{{ $user->id }}</td>
+                                    <td>{{ $user->avatar }}</td>
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
                                     <td class="center">
                                         <div class="btn-group btn-group-sm" style="float: none;">
                                         <a href="{{ route('edit_user', $user->id) }}"><button type="button" class="tabledit-edit-button btn btn-sm btn-default" style="float: none;"><span class="fa fa-pencil"></span></button></a>
