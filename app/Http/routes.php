@@ -15,9 +15,12 @@
 define('LIMIT_PAGINATION',10);
 define('LIMIT_COOKIE_LOGIN',1);
 /* End define all variable gobal for website */
-
-
 Route::group(['prefix' => 'admin'], function () {
+	Route::get('/login','Admin\Auth\Auth@index');
+	Route::post('/login','Admin\Auth\Auth@login');
+});
+
+Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function () {
     //Login Routes...
     Route::group(['prefix' => 'users'], function () {
     	/* Router for module user */
@@ -34,8 +37,7 @@ Route::group(['prefix' => 'admin'], function () {
 			'uses' => 'admin\users\Users@edit'
 		]);
 	});
-    Route::get('/login','Admin\Auth\Auth@index');
-    Route::post('/login','Admin\Auth\Auth@login');
+    
     Route::get('/logout','Admin\Auth\Auth@logout');
 
     // Registration Routes...

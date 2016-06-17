@@ -18,6 +18,7 @@ class Users extends Controller
      */
     public function index()
     {
+        // 
         $listUsers = AdminUsers::paginate(LIMIT_PAGINATION);
         $dataPassToView['listUsers'] = $listUsers;
         return view('admin.users.users', $dataPassToView);
