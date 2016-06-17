@@ -14,6 +14,7 @@
 /* Define all variable gobal for website */
 define('LIMIT_PAGINATION',10);
 define('LIMIT_COOKIE_LOGIN',1);
+define('LIMIT_PAGINATION_TEMP',10);
 /* End define all variable gobal for website */
 
 
