@@ -13,10 +13,13 @@
 
 /* Define all variable gobal for website */
 define('LIMIT_PAGINATION',10);
-define('LIMIT_COOKIE_LOGIN',1);
+define('LIMIT_COOKIE_LOGIN',60);
 /* End define all variable gobal for website */
 Route::group(['prefix' => 'admin'], function () {
-	Route::get('/login','Admin\Auth\Auth@index');
+	Route::get('/login', [
+		'as' => 'ad_login',
+		'uses' => 'Admin\Auth\Auth@index'
+	]);
 	Route::post('/login','Admin\Auth\Auth@login');
 });
 
@@ -25,7 +28,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function () {
     Route::group(['prefix' => 'users'], function () {
     	/* Router for module user */
     	Route::get('list', [
-			'as' => 'list',
+			'as' => 'user_list',
 			'uses' => 'Admin\Users\Users@index'
 		]);
 		Route::get('add-user', [
@@ -38,7 +41,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function () {
 		]);
 	});
     
-    Route::get('/logout','Admin\Auth\Auth@logout');
+    Route::get('admin-logout', [
+    	'as' => 'admin_logout',
+    	'uses' => 'Admin\Auth\Auth@logout'
+    ]);
 
     // Registration Routes...
     Route::get('admin/register', 'AdminAuth\AuthController@showRegistrationForm');

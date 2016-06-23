@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 /* Add by myself */
 use App\AdminUsers;
 use App\Http\Requests\AdminUsersRequest;
+use Illuminate\Http\Response;
 use Hash;
+use App\Libraries\PublicFunction;
 class Auth extends Controller
 {
 
@@ -19,7 +21,7 @@ class Auth extends Controller
     public function index(Request $request)
     {
         if ($request->session()->get('role_id')) {
-            return redirect('admin/users/list');
+            return redirect()->route('user_list');
         } else if ($request->cookie('email') !== null && $request->cookie('password') !== null) {
             $email = $request->cookie('email');
             $password = $request->cookie('password');
@@ -29,7 +31,7 @@ class Auth extends Controller
 
                 // Check Auth through password
                 if (Hash::check($password, $objAdminUsers->password)) {
-                    //return redirect('admin/users/list');
+                    return redirect('admin/users/list');
                 }
             }
 
@@ -58,17 +60,21 @@ class Auth extends Controller
 
                 // Check remember me
                 if ($request->remember) {
-                    $response = new \Illuminate\Http\Response();
-                    $response->withCookie('email', $email, 60);
-                    $response->withCookie('password', $password, 60);
-                    return $response;
+                    $arrayCookie = array();
+                    $arrayCookie['email'] = $email;
+                    $arrayCookie['password'] = $password;
+                    PublicFunction::set_cookie($request,$arrayCookie, LIMIT_COOKIE_LOGIN);
                 }
 
                 // Create session email and password
-                $request->session()->put('email', $email);
-                $request->session()->put('password', $password);
-                $request->session()->put('role_id', $objAdminUsers->role_id);
-                return redirect('admin/users/list');
+                $arraySession = array();
+                $arraySession['logged_in'] = TRUE;
+                $arraySession['role_id'] = $objAdminUsers->role_id;
+                $arraySession['id'] = $objAdminUsers->id;
+                PublicFunction::set_session($request,$arraySession);
+
+                // Redirect to the name router is defined before
+                return redirect()->route('user_list');
             } else {
                 $dataPassToView['message'] = trans('admin/auth.login_fault');
                 return view('admin.auth.login', $dataPassToView);
@@ -78,6 +84,24 @@ class Auth extends Controller
             return view('admin.auth.login', $dataPassToView);
         }
     }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        $request->session()->flush();
+        \Cookie::queue(
+            \Cookie::forget('email')
+        );
+        \Cookie::queue(
+            \Cookie::forget('password')
+        );
+        return redirect()->route('ad_login');
+    }
+
 
     /**
      * Store a newly created resource in storage.
