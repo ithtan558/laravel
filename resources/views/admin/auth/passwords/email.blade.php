@@ -1,20 +1,25 @@
-@extends('layouts.app')
-
-<!-- Main Content -->
+@extends('admin.layouts.appauth')
 @section('content')
-<div class="container">
-    <div class="row">
+<div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">Reset Password</div>
                 <div class="panel-body">
-                    @if (session('status'))
+
+                    <!-- Block get result from response -->
+                    @if (session('success'))
                         <div class="alert alert-success">
-                            {{ session('status') }}
+                            {{ session('success') }}
                         </div>
                     @endif
-
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/email') }}">
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    <!-- Block get result from response -->
+                    
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('ad_post_email') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -43,5 +48,4 @@
             </div>
         </div>
     </div>
-</div>
 @endsection

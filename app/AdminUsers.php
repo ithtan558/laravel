@@ -22,4 +22,17 @@ class AdminUsers extends Model {
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Update users
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    function updateKeyRand($condition = array(),$insertData = array()){
+        if(is_array($condition) && count($condition) > 0)
+            $this->db->where($condition);
+        $this->db->update("users",$insertData);
+    }
 }
