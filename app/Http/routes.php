@@ -21,6 +21,23 @@ Route::group(['prefix' => 'admin'], function () {
 		'uses' => 'Admin\Auth\Auth@index'
 	]);
 	Route::post('/login','Admin\Auth\Auth@login');
+
+	Route::get('forgot-password', [
+		'as' => 'ad_email',
+		'uses' => 'Admin\Auth\Auth@email'
+	]);
+	Route::post('forgot-password', [
+		'as' => 'ad_post_email',
+		'uses' => 'Admin\Auth\Auth@postEmail'
+	]);
+	Route::get('reset-password/{first_email}/{last_email}/{rand_key}', [
+		'as' => 'ad_reset',
+		'uses' => 'Admin\Auth\Auth@reset'
+	]);
+	Route::post('reset-password/{first_email}/{last_email}/{rand_key}', [
+		'as' => 'ad_post_reset',
+		'uses' => 'Admin\Auth\Auth@postReset'
+	]);
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function () {

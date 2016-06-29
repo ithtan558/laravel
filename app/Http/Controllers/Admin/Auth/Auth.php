@@ -10,6 +10,9 @@ use App\Http\Requests\AdminUsersRequest;
 use Illuminate\Http\Response;
 use Hash;
 use App\Libraries\PublicFunction;
+use Mail;
+use Lang;
+use Validator;
 class Auth extends Controller
 {
 
@@ -104,14 +107,136 @@ class Auth extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
+     * Form post email to reset password for admin.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function postEmail(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('ad_email')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        // Check method
+        if ($request->method() === 'POST') {
+            $email = $request->email;
+            // Check exits email in database
+            $objAdminUsers = AdminUsers::where('email', $email)->first();
+            if ($objAdminUsers != null) {
+                $rand_temp = md5(uniqid(rand(),TRUE));
+                $full_email=explode('@', $email);
+                $first_email=$full_email[0];
+                $last_email=$full_email[1];
+                $data = array(
+                    'name' => $objAdminUsers->name,
+                    'forgot_url' => env('APP_URL').'/'.Lang::getLocale().'/admin/reset-password/'.$first_email.'/'.$last_email.'/'.$rand_temp,
+                    'site_name' => "Laravel dev"
+                );
+                // Check send mail success
+                if (Mail::send('email_templates.forgotPassword', $data, function ($m) use ($objAdminUsers) {
+                    $m->from('no-reply@laravel.dev', 'Active verification');
+                    $m->to($objAdminUsers->email, $objAdminUsers->name)->subject('Workspharma Team: New Password for Login');
+                })) {
+                    // Update key rand for forgot
+                    AdminUsers::where('email', $email)
+                              ->update(['remember_token' => $rand_temp]);
+                    $request->session()->flash('success', 'Task was successful!');
+                    return redirect()->route('ad_email');
+                }
+            } else {
+                // Add messageBag to validation
+                $validator->getMessageBag()->add('email', 'Email not found');
+                return redirect()->route('ad_email')
+                            ->withErrors($validator)
+                            ->withInput();
+                }
+            
+        } else {
+            abort(403, 'Unauthorized action.');
+        }
+        
+    }
+
+    /**
+     * Show the form reset password for admin.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function reset(Request $request)
+    {
+        $dataPassToView['email'] = $request->segment(4).'@'.$request->segment(5);
+        $dataPassToView['first_email'] = $request->segment(4);
+        $dataPassToView['last_email'] = $request->segment(5);
+        $dataPassToView['token'] = $request->segment(6);
+        return view('admin.auth.passwords.reset', $dataPassToView);   
+    }
+
+    /**
+     * Form reset password for admin.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function postReset(Request $request)
+    {
+        // get 3 paramester and assign to array
+        $arrayParamester = array(
+            'first_email' => $request->segment(4),
+            'last_email' => $request->segment(5),
+            'rand_key' => $request->segment(6)
+        );
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'token' => 'required',
+            'password' => 'required',
+            'password_confirmation' => 'required|same:password',
+
+        ]);
+        if ($validator->fails()) {
+            return redirect()->route('ad_reset', $arrayParamester)
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        // Check method
+        if ($request->method() === 'POST') {
+            // Check token exits in key_forgot of user
+            $token = $request->token;
+            $email = $request->email;
+            $password = $request->password;
+            $user = AdminUsers::where('remember_token', '=', $token)
+                              ->where('email', '=', $email)->first();
+            if (count($user) > 0) {
+                $updateUser = AdminUsers::find($user->id);
+                $updateUser->password = bcrypt($password);
+                $updateUser->remember_token = '';
+                $updateUser->save();
+                $request->session()->flash('success', 'Your password changed, please login by new password.');
+                return redirect()->route('ad_reset', $arrayParamester);
+            } else {
+                $request->session()->flash('error', 'Token not found, please check again!');
+                return redirect()->route('ad_reset', $arrayParamester);
+            }
+        } else {
+            abort(403, 'Unauthorized action.');
+        }  
+    }
+
+    /**
+     * Post the form reset password for admin.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function email()
+    {
+        return view('admin.auth.passwords.email');
     }
 
     /**
@@ -158,4 +283,6 @@ class Auth extends Controller
     {
         //
     }
+
+
 }
