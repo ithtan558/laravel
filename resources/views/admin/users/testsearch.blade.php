@@ -10,7 +10,7 @@
         <h1 class="text-primary" style="text-align: center;">Laravel 5 Search Using Elasticsearch</h1>
     </div>
 </div>
-
+<!-- Update list users -->
 <div class="container">
 	<div class="panel panel-primary">
 	  <div class="panel-body">
@@ -28,4 +28,5 @@
 	  </div>
 	</div>
 </div>
+<!-- Update list users -->
 @endsection
