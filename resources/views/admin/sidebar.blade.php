@@ -239,7 +239,7 @@
                     <a href="#"><i class="fa fa-user"></i> User<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="/">List user</a>
+                            <a href="{{ route('list_users') }}">List user</a>
                         </li>
                         <li>
                             <a href="{{ route('add_user') }}">Add user</a>

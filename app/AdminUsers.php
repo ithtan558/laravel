@@ -3,8 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Elasticquent\ElasticquentTrait;
 
 class AdminUsers extends Model {
+    use ElasticquentTrait;
 	/**
      * The attributes that are mass assignable.
      *
@@ -22,4 +24,5 @@ class AdminUsers extends Model {
     protected $hidden = [
         'password', 'remember_token',
     ];
+
 }

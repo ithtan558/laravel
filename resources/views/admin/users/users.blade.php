@@ -11,7 +11,18 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    DataTables Advanced Tables
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <form class="" role="search" method="GET" action="">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" name="search" value="{{ Input::get('search') }}">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -44,6 +55,7 @@
                             </tbody>
                         </table>
                     </div>
+                    {{ $listUsers->links() }}
                     <!-- /.table-responsive -->
                 </div>
                 <!-- /.panel-body -->
@@ -53,13 +65,4 @@
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
-@endsection
-@section('javascriptDown')
-	<script type="text/javascript">
-    $(document).ready(function() {
-        $('#dataTables-example').DataTable({
-            responsive: true
-        });
-    });
-    </script>
 @endsection
