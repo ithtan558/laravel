@@ -10,17 +10,44 @@
 | and give it the controller to call when that URI is requested.
 |
  */
+// Route::get('/', function () {
+//         $client = Elasticsearch\ClientBuilder::create()->build();
+//         dd($client);
+//         $total = App\Product::count();
+//         $products = App\Product::all();
+// });
 
-/* Define all variable gobal for website */
-define('LIMIT_PAGINATION', 10);
-/* End define all variable gobal for website */
+Route::group(['prefix' => 'admin'], function () {
+		Route::get('/login', 'Admin\Auth\Auth@index');
+		Route::post('/login', 'Admin\Auth\Auth@login');
+	});
 
 Route::group(['prefix' => 'admin'], function () {
 		//Login Routes...
-		Route::get('/users', 'Admin\Users\Users@index');
-		Route::get('/login', 'Admin\Auth\Auth@index');
-		Route::post('/login', 'Admin\Auth\Auth@login');
-		Route::get('/logout', 'AdminAuth\AuthController@logout');
+		Route::group(['prefix' => 'users'], function () {
+				/* Router for module user */
+				Route::get('list', [
+						'as'   => 'list_users',
+						'uses' => 'Admin\Users\Users@index'
+					]);
+				Route::post('list', [
+						'as'   => 'list_users',
+						'uses' => 'Admin\Users\Users@index'
+					]);
+				Route::get('add-user', [
+						'as'   => 'add_user',
+						'uses' => 'Admin\Users\Users@create'
+					]);
+				Route::post('add-user', [
+						'uses' => 'Admin\Users\Users@store'
+					]);
+				Route::get('edit-user/{id}', [
+						'as'   => 'edit_user',
+						'uses' => 'Admin\Users\Users@edit'
+					]);
+			});
+
+		Route::get('/logout', 'Admin\Auth\Auth@logout');
 
 		// Registration Routes...
 		Route::get('admin/register', 'AdminAuth\AuthController@showRegistrationForm');

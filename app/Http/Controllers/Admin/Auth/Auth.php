@@ -6,11 +6,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 /* Add by myself */
 use App\AdminUsers;
-use App\Http\Requests\AdminUsersRequest;
+use App\Http\Requests\Admin\Auth\AdminAuthRequest;
 use Hash;
 class Auth extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +18,9 @@ class Auth extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->cookie('email') !== false && $request->cookie('password') !== false) {
+        if ($request->session()->get('role_id') == 1) {
+            return redirect('admin/users/list');
+        } else if ($request->cookie('email') !== null && $request->cookie('password') !== null) {
             $email = $request->cookie('email');
             $password = $request->cookie('password');
             // Check Auth through email
@@ -27,21 +29,21 @@ class Auth extends Controller
 
                 // Check Auth through password
                 if (Hash::check($password, $objAdminUsers->password)) {
-                    return redirect('admin/users/list');
+                    return redirect()->to('list_users');
                 }
             }
-            
+
         } else {
             return View('admin.auth.login');
         }
-        
+
     }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function login(AdminUsersRequest $request)
+    public function login(AdminAuthRequest $request)
     {
         // Check isset cookie email and password
         $email = $request->email;
@@ -57,11 +59,16 @@ class Auth extends Controller
                 // Check remember me
                 if ($request->remember) {
                     $response = new \Illuminate\Http\Response();
-                    $response->withCookie('password', $password, 60);
                     $response->withCookie('email', $email, 60);
+                    $response->withCookie('password', $password, 60);
                     return $response;
                 }
-                return redirect('admin/users/list');
+
+                // Create session email and password
+                $request->session()->put('email', $email);
+                $request->session()->put('password', $password);
+                $request->session()->put('role_id', $objAdminUsers->role_id);
+                return redirect()->to('list_users');
             } else {
                 $dataPassToView['message'] = trans('admin/auth.login_fault');
                 return view('admin.auth.login', $dataPassToView);

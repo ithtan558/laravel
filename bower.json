@@ -1,0 +1,19 @@
+{
+  "name": "laravel.local",
+  "description": "This is the place save all packages",
+  "main": "",
+  "authors": [
+    "Huynh An (ithtan558@gmail.com)"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}
